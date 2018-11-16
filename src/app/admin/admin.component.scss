@@ -1,0 +1,24 @@
+:host {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+mat-toolbar {
+
+    .header-spacer {
+        flex: 1;
+    }
+
+    .logout-button {
+        width: auto;
+    }
+}
+
+mat-sidenav-container {
+    flex: 1;
+
+    mat-nav-list {
+        padding-top: 0;
+    }
+}
