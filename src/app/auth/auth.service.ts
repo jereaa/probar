@@ -12,6 +12,7 @@ export class AuthService {
     auth = new auth0.WebAuth({
         clientID: AUTH_CONFIG.CLIENT_ID,
         domain: AUTH_CONFIG.DOMAIN,
+        audience: AUTH_CONFIG.AUDIENCE,
         responseType: AUTH_CONFIG.RESPONSE_TYPE,
         redirectUri: AUTH_CONFIG.REDIRECT,
         scope: AUTH_CONFIG.SCOPE
@@ -86,7 +87,7 @@ export class AuthService {
 
     private checkAdmin(profile: auth0.Auth0UserProfile): boolean {
         // Check if the user has admin roles
-        const roles: string[] = profile[AUTH_CONFIG.NAMESPACE + "app_metadata"].roles || [];
+        const roles: string[] = profile[AUTH_CONFIG.NAMESPACE + AUTH_CONFIG.CLIENT_ID].roles || [];
         return roles.indexOf("admin") !== -1;
     }
 
