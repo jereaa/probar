@@ -65,7 +65,8 @@ adminRouter.post("/services", (req, res) => {
                     if (error.code === 11000) {
                         return res
                             .status(400)
-                            .send(new ServerError(
+                            .send(
+                                new ServerError(
                                     "Duplicate code",
                                     `The code '${newService.code}' is already being used by another service.`,
                                     ErrorCode.SERVICE_DUPLICATE_CODE
@@ -100,13 +101,15 @@ adminRouter.get("/services/:code", (req, res) => {
         }
 
         if (!service) {
-            console.error("Error MOFO!");
-            return res.status(404).send({
-                error: {
-                    name: "Service not found",
-                    message: `The service of code '${req.params.code}' could not be found.`
-                }
-            });
+            return res
+                .status(404)
+                .send(
+                    new ServerError(
+                        "Service not found",
+                        `The service of code '${req.params.code}' could not be found.`,
+                        ErrorCode.SERVICE_CODE_NOT_FOUND
+                    )
+                );
         }
         return res.send(service);
     });
@@ -139,7 +142,8 @@ adminRouter.put("/services/:code", (req, res) => {
                 if (err.code === 11000) {
                     return res
                         .status(400)
-                        .send(new ServerError(
+                        .send(
+                            new ServerError(
                                 "Duplicate code",
                                 `The code '${service.code}' is already being used by another service.`,
                                 ErrorCode.SERVICE_DUPLICATE_CODE

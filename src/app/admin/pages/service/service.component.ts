@@ -67,6 +67,12 @@ export class ServiceComponent implements OnInit, OnDestroy {
                     this._buildForm();
                 },
                 (error) => {
+                    if (error.code === ErrorCode.SERVICE_CODE_NOT_FOUND) {
+                        console.error(error.message);
+                        this.router.navigate(["admin/services"]);
+                        return;
+                    }
+
                     this.errorLoading = true;
                     console.error(`Error ocurred: ${JSON.stringify(error)}`);
                 },
@@ -77,7 +83,7 @@ export class ServiceComponent implements OnInit, OnDestroy {
 
     private _buildForm(): void {
         this.serviceForm = this.fb.group({
-            code: new FormControl(this.service.code, {
+            code: new FormControl(this.isEdit ? this.service.code : "", {
                 asyncValidators: [uniqueServiceCodeValidator(this.serviceService, this.service._id)],
                 updateOn: "blur"
             }),
