@@ -6,15 +6,15 @@ import * as path from "path";
 import { CONFIG } from "./config";
 import { adminRouter } from "./api";
 
-mongoose.connect(CONFIG.MONGO_URI);
+mongoose.connect(CONFIG.MONGODB_URI);
 const mongoDB = mongoose.connection;
 
 mongoDB.on("error", () => {
-    console.error(`MongoDB connection error. Please make sure that ${CONFIG.MONGO_URI} is running.`);
+    console.error(`MongoDB connection error. Please make sure that ${CONFIG.MONGODB_URI} is running.`);
 });
 
 mongoDB.once("open", () => {
-    console.log(`Connected to MongoDB at ${CONFIG.MONGO_URI}`);
+    console.log(`Connected to MongoDB at ${CONFIG.MONGODB_URI}`);
 });
 
 const app = express();

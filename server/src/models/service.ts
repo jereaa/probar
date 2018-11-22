@@ -5,39 +5,23 @@ const Schema = mongoose.Schema;
 export interface IService extends mongoose.Document {
     code: string;
     name: string;
+    description: string;
     value: number;
     additional: boolean;
     price: number;
-    ordered_times: number;
-    last_ordered: Date;
+    event_count: number;
+    last_event: Date;
 }
 
-export const serviceSchema = new Schema({
-    code: { type: String, required: true },
+const serviceSchema = new Schema({
+    code: { type: String, required: true, unique: true },
     name: { type: String, required: true },
+    description: { type: String },
     additional: { type: Boolean, default: false },
     price: { type: Number, required: true },
-    value: { type: Number },
-    ordered_times: { type: Number, default: 0},
-    last_ordered: { type: Date }
-});
-
-serviceSchema.pre("save", (next) => {
-    if (this.isNew) {
-        ServiceModel.findOne().sort("-value").exec((err: Error, service) => {
-            if (err) {
-                console.error(`Error saving service! Error: ${err}`);
-            }
-
-            if (!service) {
-                this.value = 1;
-            } else {
-                this.value = service.value;
-            }
-            next();
-        });
-    }
-    next();
+    value: { type: Number, required: true, unique: true },
+    event_count: { type: Number, default: 0},
+    last_event: { type: Date, default: null }
 });
 
 export const ServiceModel = mongoose.model<IService>("service", serviceSchema);

@@ -1,0 +1,29 @@
+:host {
+    flex: 1;
+    display: flex;
+}
+
+.services-container {
+    display: flex;
+    flex: 1;
+
+    table {
+        flex: 1;
+    }
+}
+
+.no-services-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+button.mat-fab {
+    position: fixed;
+    bottom: 3em;
+    right: 3em;
+}
