@@ -5,16 +5,17 @@ import * as path from "path";
 
 import { CONFIG } from "./config";
 import { adminRouter } from "./api";
+import { logger } from "./logger";
 
 mongoose.connect(CONFIG.MONGODB_URI);
 const mongoDB = mongoose.connection;
 
 mongoDB.on("error", () => {
-    console.error(`MongoDB connection error. Please make sure that ${CONFIG.MONGODB_URI} is running.`);
+    logger.error(`MongoDB connection error. Please make sure that ${CONFIG.MONGODB_URI} is running.`);
 });
 
 mongoDB.once("open", () => {
-    console.log(`Connected to MongoDB at ${CONFIG.MONGODB_URI}`);
+    logger.info(`Connected to MongoDB at ${CONFIG.MONGODB_URI}`);
 });
 
 const app = express();
@@ -36,4 +37,4 @@ if (process.env.NODE_ENV === "production") {
     });
 }
 
-app.listen(port, () => console.log(`Server running on localhost:${port}`));
+app.listen(port, () => logger.info(`Server running on localhost:${port}`));

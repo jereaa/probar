@@ -5,6 +5,7 @@ import * as jwks from "jwks-rsa";
 import { ServiceModel, IService } from "./models/service";
 import { CONFIG } from "./config";
 import { ServerError, ErrorCode } from "./models/server-error";
+import { logger } from "./logger";
 
 const adminRouter = express.Router();
 
@@ -50,7 +51,7 @@ adminRouter.post("/services", (req, res) => {
         .sort("-value")
         .exec((err: Error, service) => {
             if (err) {
-                console.error(`Error finding service! Error: ${err.name} - ${err.message}`);
+                logger.error(`Error finding service! Error: ${err.name} - ${err.message}`);
                 return res.status(500).send({ message: err.message });
             }
 
@@ -73,7 +74,7 @@ adminRouter.post("/services", (req, res) => {
                                 )
                             );
                     } else {
-                        console.error(`Full error: ${JSON.stringify(error)}`);
+                        logger.error(`Full error: ${JSON.stringify(error)}`);
                         return res.status(500).send({ error });
                     }
                 }
@@ -85,7 +86,7 @@ adminRouter.post("/services", (req, res) => {
 adminRouter.get("/services", (req, res) => {
     ServiceModel.find((err: Error, services: IService[]) => {
         if (err) {
-            console.error(`Error finding services. Error: ${err.name} - ${err.message}`);
+            logger.error(`Error finding services. Error: ${err.name} - ${err.message}`);
             return res.status(500).send({ message: err.message });
         }
 
@@ -96,7 +97,7 @@ adminRouter.get("/services", (req, res) => {
 adminRouter.get("/services/:code", (req, res) => {
     ServiceModel.findOne({ code: req.params.code }, (error: Error, service) => {
         if (error) {
-            console.error(`Error finding service. Error: ${JSON.stringify(error)}`);
+            logger.error(`Error finding service. Error: ${JSON.stringify(error)}`);
             return res.status(500).send({ error: error });
         }
 
@@ -118,7 +119,7 @@ adminRouter.get("/services/:code", (req, res) => {
 adminRouter.put("/services/:code", (req, res) => {
     ServiceModel.findOne({ code: req.params.code }, (error: Error, service) => {
         if (error) {
-            console.error(`Error finding service. Error: ${JSON.stringify(error)}`);
+            logger.error(`Error finding service. Error: ${JSON.stringify(error)}`);
             return res.status(500).send({ error: error });
         }
 
@@ -150,7 +151,7 @@ adminRouter.put("/services/:code", (req, res) => {
                             )
                         );
                 }
-                console.error(`Error updating service. Error: ${JSON.stringify(err)}`);
+                logger.error(`Error updating service. Error: ${JSON.stringify(err)}`);
                 return res.status(500).send({ error: err });
             }
             return res.send(savedService);
