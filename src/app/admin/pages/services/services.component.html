@@ -37,7 +37,10 @@
             </ng-container>
     
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editService(row.code)"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                (click)="editService(row.code)"
+                class="services-row">
+            </tr>
         </table>
     </div>
 

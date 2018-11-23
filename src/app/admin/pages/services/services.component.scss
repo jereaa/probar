@@ -9,6 +9,11 @@
 
     table {
         flex: 1;
+
+        .services-row:hover {
+            background: #f5f5f5;
+            cursor: pointer;
+        }
     }
 }
 
