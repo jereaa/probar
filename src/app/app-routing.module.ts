@@ -6,6 +6,11 @@ import { AdminGuard } from "./auth/admin.guard";
 
 const routes: Routes = [
     {
+        path: "",
+        pathMatch: "full",
+        loadChildren: "./main/main.module#MainModule"
+    },
+    {
         path: "admin",
         loadChildren: "./admin/admin.module#AdminModule",
         canLoad: [AdminGuard]

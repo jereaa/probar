@@ -1,0 +1,12 @@
+<app-spinner *ngIf="loading"></app-spinner>
+
+<ng-template [ngIf]="!loading">
+
+    <!-- No supplies in inventory -->
+    <div class="no-items-container" *ngIf="!supplies || supplies.size === 0">
+        <h3>There are no supplies yet<br />Try adding your first one</h3>
+    </div>
+
+    <!-- Add new supply FAB -->
+    <button mat-fab color="primary" (click)="openDialog(null)"><mat-icon aria-label="Add new supply">add</mat-icon></button>
+</ng-template>

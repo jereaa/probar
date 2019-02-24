@@ -1,17 +1,15 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
-    MatProgressSpinnerModule,
-    MatToolbarModule,
     MatSidenavModule,
-    MatIconModule,
     MatListModule,
-    MatButtonModule,
     MatTableModule,
     MatSortModule,
     MatCheckboxModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatDialogModule,
+    MatSelectModule
 } from "@angular/material";
 
 @NgModule({
@@ -20,17 +18,15 @@ import {
         CommonModule
     ],
     exports: [
-        MatProgressSpinnerModule,
-        MatToolbarModule,
         MatSidenavModule,
-        MatIconModule,
         MatListModule,
-        MatButtonModule,
         MatTableModule,
         MatSortModule,
         MatCheckboxModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        MatDialogModule,
+        MatSelectModule
     ]
 })
 export class AdminMaterialModule {}

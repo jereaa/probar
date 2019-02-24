@@ -5,6 +5,7 @@ import { AdminComponent } from "./admin.component";
 import { AdminGuard } from "../auth/admin.guard";
 import { ServicesComponent } from "./pages/services/services.component";
 import { ServiceComponent } from "./pages/service/service.component";
+import { InventoryComponent } from "./pages/inventory/inventory.component";
 
 const routes: Routes = [
     {
@@ -20,6 +21,10 @@ const routes: Routes = [
             {
                 path: "services/:code",
                 component: ServiceComponent
+            },
+            {
+                path: "inventory",
+                component: InventoryComponent
             }
         ]
     }

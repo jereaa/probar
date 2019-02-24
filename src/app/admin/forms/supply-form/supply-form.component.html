@@ -1,0 +1,89 @@
+<app-spinner *ngIf="loading"></app-spinner>
+
+<ng-template [ngIf]="!loading">
+    <form [formGroup]="supplyForm" (ngSubmit)="submitForm()">
+    
+        <!-- Brand -->
+        <mat-form-field>
+            <mat-label>Brand</mat-label>
+            <input matInput placeholder="Skyy" formControlName="brand" autofocus>
+        </mat-form-field>
+    
+        <!-- Generic Name -->
+        <mat-form-field>
+            <mat-label>Generic Name</mat-label>
+            <input matInput placeholder="Vodka" formControlName="generic_name">
+        </mat-form-field>
+    
+        <!-- Category -->
+        <mat-form-field>
+            <mat-select placeholder="Category" formControlName="category">
+                <mat-option *ngFor="let item of supplyCategories" [value]="item.value">
+                    {{item.display_en}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="supplyForm.get('category').hasError('required')">
+                Category is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Quantity -->
+        <mat-form-field>
+            <mat-label>Quantity</mat-label>
+            <input matInput type="number" min="0" formControlName="quantity">
+
+            <mat-error *ngIf="supplyForm.get('quantity').hasError('min')">
+                There can't be a negative quantity
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Amount -->
+        <mat-form-field>
+            <mat-label>Amount</mat-label>
+            <input matInput placeholder="950" min="0" type="number" formControlName="amount">
+
+            <mat-error *ngIf="supplyForm.get('amount').hasError('min')">
+                There can't be a negative amount
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Units -->
+        <mat-form-field>
+            <mat-label>Units</mat-label>
+            <input matInput placeholder="ml" formControlName="unit">
+        </mat-form-field>
+
+        <!-- Price -->
+        <mat-form-field>
+            <mat-label>Price</mat-label>
+            <input matInput placeholder="100" type="number" min="0" formControlName="price">
+            <span matPrefix>$&nbsp;</span>
+
+            <mat-error *ngIf="supplyForm.get('price').hasError('required')">
+                Price is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="supplyForm.get('price').hasError('min')">
+                Price can't be negative
+            </mat-error>
+        </mat-form-field>
+
+        <!-- ServicesId -->
+        <mat-form-field>
+            <mat-select placeholder="Services" formControlName="servicesId" multiple>
+                <mat-select-trigger>
+                    {{ supplyForm.get('servicesId').value ? getServiceNameForValue(supplyForm.get('servicesId').value[0]) : '' }}
+                    <span *ngIf="supplyForm.get('servicesId').value?.length > 1" class="additional-services-selector">
+                        (+{{supplyForm.get('servicesId').value.length - 1}} {{supplyForm.get('servicesId').value?.length === 2 ? 'other' : 'others'}})
+                    </span>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of services" [value]="item.value">
+                    {{item.name}}
+                </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="supplyForm.get('servicesId').hasError('required')">
+                You must select at least <strong>one</strong> service
+            </mat-error>
+        </mat-form-field>
+    </form>
+</ng-template>

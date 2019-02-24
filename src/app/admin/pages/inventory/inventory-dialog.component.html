@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
+
+<mat-dialog-content>
+    <app-supply-form [supply]="data"></app-supply-form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button>{{ data ? 'Edit' : 'Add' }}</button>
+</mat-dialog-actions>

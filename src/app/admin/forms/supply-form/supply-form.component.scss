@@ -1,0 +1,15 @@
+:host {
+    display: flex;
+    flex: 1;
+}
+
+.additional-services-selector {
+    opacity: 0.75;
+    font-size: 0.75em;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}

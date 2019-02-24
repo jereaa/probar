@@ -4,8 +4,8 @@ import * as cors from "cors";
 import * as path from "path";
 
 import { CONFIG } from "./config";
-import { adminRouter } from "./api";
 import { logger } from "./logger";
+import { adminRouter } from "./Admin API/adminAPI";
 
 mongoose.connect(CONFIG.MONGODB_URI);
 const mongoDB = mongoose.connection;

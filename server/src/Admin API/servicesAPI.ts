@@ -1,44 +1,14 @@
 import * as express from "express";
-import * as jwt from "express-jwt";
-import * as jwks from "jwks-rsa";
 
-import { ServiceModel, IService } from "./models/service";
-import { CONFIG } from "./config";
-import { ServerError, ErrorCode } from "./models/server-error";
-import { logger } from "./logger";
+import { ServiceModel, IService } from "../models/service";
+import { ServerError, ErrorCode } from "../models/server-error";
+import { logger } from "../logger";
 
-const adminRouter = express.Router();
-
-const jwtCheck = jwt({
-    secret: jwks.expressJwtSecret({
-        cache: true,
-        rateLimit: true,
-        jwksRequestsPerMinute: 5,
-        jwksUri: `${CONFIG.AUTH0_ISSUER}.well-known/jwks.json`
-    }),
-    audience: "https://probar-barras.com/api",
-    issuer: CONFIG.AUTH0_ISSUER,
-    algorithms: ["RS256"]
-});
-
-const adminCheck = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const roles = req.user[CONFIG.AUTH0_AUDIENCE].roles || [];
-    if (roles.indexOf("admin") !== -1) {
-        next();
-    } else {
-        res.status(401).send({ message: "Not authorized for admin access" });
-    }
-};
-
-adminRouter.use(jwtCheck, adminCheck);
-
-adminRouter.get("/", (req, res) => {
-    res.send({ message: "Admin API is up!" });
-});
+const servicesRouter = express.Router();
 
 // ----------- SERVICES ------------ //
 
-adminRouter.post("/services", (req, res) => {
+servicesRouter.post("/", (req, res) => {
     const newService = new ServiceModel({
         code: req.body.code.toLowerCase(),
         name: req.body.name,
@@ -52,7 +22,7 @@ adminRouter.post("/services", (req, res) => {
         .exec((err: Error, service) => {
             if (err) {
                 logger.error(`Error finding service! Error: ${err.name} - ${err.message}`);
-                return res.status(500).send({ message: err.message });
+                return res.status(500).send({ err });
             }
 
             if (!service) {
@@ -61,7 +31,7 @@ adminRouter.post("/services", (req, res) => {
                 newService.value = service.value * 2;
             }
 
-            newService.save((error) => {
+            newService.save((error, savedService) => {
                 if (error) {
                     if (error.code === 11000) {
                         return res
@@ -78,12 +48,12 @@ adminRouter.post("/services", (req, res) => {
                         return res.status(500).send({ error });
                     }
                 }
-                return res.status(201).send(newService);
+                return res.status(201).send(savedService);
             });
         });
 });
 
-adminRouter.get("/services", (req, res) => {
+servicesRouter.get("/", (req, res) => {
     ServiceModel.find((err: Error, services: IService[]) => {
         if (err) {
             logger.error(`Error finding services. Error: ${err.name} - ${err.message}`);
@@ -94,7 +64,7 @@ adminRouter.get("/services", (req, res) => {
     });
 });
 
-adminRouter.get("/services/:code", (req, res) => {
+servicesRouter.get("/:code", (req, res) => {
     ServiceModel.findOne({ code: req.params.code }, (error: Error, service) => {
         if (error) {
             logger.error(`Error finding service. Error: ${JSON.stringify(error)}`);
@@ -116,7 +86,7 @@ adminRouter.get("/services/:code", (req, res) => {
     });
 });
 
-adminRouter.put("/services/:code", (req, res) => {
+servicesRouter.put("/:code", (req, res) => {
     ServiceModel.findOne({ code: req.params.code }, (error: Error, service) => {
         if (error) {
             logger.error(`Error finding service. Error: ${JSON.stringify(error)}`);
@@ -159,4 +129,4 @@ adminRouter.put("/services/:code", (req, res) => {
     });
 });
 
-export { adminRouter };
+export { servicesRouter };
